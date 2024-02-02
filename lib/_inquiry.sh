@@ -11,7 +11,7 @@ get_mysql_root_password() {
 get_link_git() {
   
   print_banner
-  printf "${WHITE} 💻 Insira o link do GITHUB do seu Logycachat que deseja instalar:${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Insira o link do GITHUB do seu AutoAtende que deseja instalar:${GRAY_LIGHT}"
   printf "\n\n"
   read -p "> " link_git
 }
@@ -198,17 +198,22 @@ software_dominio() {
   configurar_dominio
 }
 
+backup() {
+  executar_backup
+}
+
 inquiry_options() {
   
   print_banner
-  printf "${WHITE} 💻 Bem vindo(a) ao Gerenciador Logycachat - Atendimento sem limites, selecione abaixo a proxima ação!${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Bem vindo(a) ao Gerenciador AutoAtende - Atendimento sem limites, selecione abaixo a proxima ação!${GRAY_LIGHT}"
   printf "\n\n"
-  printf "   [0] Instalar Logycachat\n"
-  printf "   [1] Atualizar Logycachat\n"
-  printf "   [2] Deletar Logycachat\n"
-  printf "   [3] Bloquear Logycachat\n"
-  printf "   [4] Desbloquear Logycachat\n"
-  printf "   [5] Alter. dominio Logycachat\n"
+  printf "   [0] Instalar AutoAtende\n"
+  printf "   [1] Atualizar AutoAtende\n"
+  printf "   [2] Deletar AutoAtende\n"
+  printf "   [3] Bloquear AutoAtende\n"
+  printf "   [4] Desbloquear AutoAtende\n"
+  printf "   [5] Alter. dominio AutoAtende\n"
+  print  "   [6] Backup BD AutoAtende\n"
   printf "\n"
   read -p "> " option
 
@@ -235,7 +240,11 @@ inquiry_options() {
     5) 
       software_dominio 
       exit
-      ;;        
+      ;;    
+    6) 
+      backup 
+      exit
+      ;;            
 
     *) exit ;;
   esac
