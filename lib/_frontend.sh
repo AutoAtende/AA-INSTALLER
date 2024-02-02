@@ -90,7 +90,9 @@ frontend_set_env() {
 sudo su - deploy << EOF
   cat <<[-]EOF > /home/deploy/${instancia_add}/frontend/.env
 REACT_APP_BACKEND_URL=${backend_url}
-REACT_APP_HOURS_CLOSE_TICKETS_AUTO = 24
+REACT_APP_HOURS_CLOSE_TICKETS_AUTO=24
+REACT_APP_PAGE_TITLE=AutoAtende
+REACT_APP_LOCALE=pt-br
 [-]EOF
 EOF
 
