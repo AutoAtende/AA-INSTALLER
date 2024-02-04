@@ -213,7 +213,7 @@ inquiry_options() {
   printf "   [3] Bloquear AutoAtende\n"
   printf "   [4] Desbloquear AutoAtende\n"
   printf "   [5] Alter. dominio AutoAtende\n"
-  print  "   [6] Backup BD AutoAtende\n"
+  printf "   [6] Backup BD AutoAtende\n"
   printf "\n"
   read -p "> " option
 

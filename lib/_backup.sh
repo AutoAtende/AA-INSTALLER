@@ -38,17 +38,17 @@ printf "\n\n"
 
 if [ ! -d ${PBACKUP} ]; then
 	
-	echo ""
-	echo " A pasta de backup nao foi encontrada!"
+	printf ""
+	printf " A pasta de backup nao foi encontrada!"
 	mkdir -p ${PBACKUP}
-	echo " Iniciando Tarefa de backup..."
-	echo ""
+	printf " Iniciando Tarefa de backup..."
+	printf ""
 
 else
 
-	echo ""
-	echo " Rotacionando backups mais antigos que $NDIAS"
-	echo ""
+	printf ""
+	printf " Rotacionando backups mais antigos que $NDIAS"
+	printf ""
 
 	find ${PBACKUP} -type d -mtime +$NDIAS -exec rm -rf {} \;
 
@@ -56,7 +56,7 @@ fi
 
 printf "${WHITE} 💻 Iniciando o backup..${GRAY_LIGHT}"
 printf "\n\n"
-echo "Iniciando o backup" |mutt -s "Backup $HOST Iniciado" $EMAIL
+printf "Iniciando o backup" |mutt -s "Backup $HOST Iniciado" $EMAIL
 
 sleep 2
 
@@ -124,7 +124,7 @@ scp -o StrictHostKeyChecking=no -r $PBACKUP/$DATA $SDESTINO:${RBACKUP}/$HOST/
 
 printf "${WHITE} 💻 Backup realizado com sucesso...${GRAY_LIGHT}"
 printf "\n\n"
-echo "Backup finalizado" |mutt -s "Backup $HOST Finalizado!" $EMAIL
+printf "Backup finalizado" |mutt -s "Backup $HOST Finalizado!" $EMAIL
 
 sleep 2
 }
