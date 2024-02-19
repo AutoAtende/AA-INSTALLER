@@ -29,7 +29,7 @@ EOF
 #######################################
 system_git_clone() {
   print_banner
-  printf "${WHITE} 💻 Fazendo download do código Logycachat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Fazendo download do código AutoAtende...${GRAY_LIGHT}"
   printf "\n\n"
 
 
@@ -49,7 +49,7 @@ EOF
 #######################################
 system_update() {
   print_banner
-  printf "${WHITE} 💻 Vamos atualizar o sistema Logycachat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos atualizar o sistema AutoAtende...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -71,7 +71,7 @@ EOF
 #######################################
 deletar_tudo() {
   print_banner
-  printf "${WHITE} 💻 Vamos deletar o Logycachat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos deletar o AutoAtende...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -117,7 +117,7 @@ EOF
 #######################################
 configurar_bloqueio() {
   print_banner
-  printf "${WHITE} 💻 Vamos bloquear o Logycachat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos bloquear o AutoAtende...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -144,7 +144,7 @@ EOF
 #######################################
 configurar_desbloqueio() {
   print_banner
-  printf "${WHITE} 💻 Vamos Desbloquear o Logycachat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos Desbloquear o AutoAtende...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -170,7 +170,7 @@ EOF
 #######################################
 configurar_dominio() {
   print_banner
-  printf "${WHITE} 💻 Vamos Alterar os Dominios do Logycachat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos Alterar os Dominios do AutoAtende...${GRAY_LIGHT}"
   printf "\n\n"
 
 sleep 2
@@ -291,7 +291,67 @@ system_node_install() {
   sudo apt-get update -y && sudo apt-get -y install postgresql
   sleep 2
   sudo timedatectl set-timezone America/Sao_Paulo
-  
+EOF
+
+  sleep 2
+}
+#######################################
+# installs fail2ban
+# Arguments:
+#   None
+#######################################
+system_fail2ban_install() {
+  print_banner
+  printf "${WHITE} 💻 Instalando fail2ban...${GRAY_LIGHT}"
+  printf "\n\n"
+
+  sleep 2
+
+  sudo su - root <<EOF
+sudo apt install fail2ban -y && sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+EOF
+
+  sleep 2
+}
+#######################################
+# configure fail2ban
+# Arguments:
+#   None
+#######################################
+system_fail2ban_conf() {
+  print_banner
+  printf "${WHITE} 💻 Configurando o fail2ban...${GRAY_LIGHT}"
+  printf "\n\n"
+
+  sleep 2
+
+  sudo su - root <<EOF
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban
+EOF
+
+  sleep 2
+}
+#######################################
+# configure firewall
+# Arguments:
+#   None
+#######################################
+system_firewall_conf() {
+  print_banner
+  printf "${WHITE} 💻 Configurando o firewall...${GRAY_LIGHT}"
+  printf "\n\n"
+
+  sleep 2
+
+  sudo su - root <<EOF
+sudo ufw default allow outgoing
+sudo ufw default deny incoming
+sudo ufw allow ssh
+sudo ufw allow 22
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw enable
 EOF
 
   sleep 2

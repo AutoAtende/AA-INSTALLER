@@ -39,6 +39,9 @@ inquiry_options
 # dependencies related
 system_update
 system_node_install
+system_fail2ban_install
+system_fail2ban_conf
+system_firewall_conf
 system_pm2_install
 system_docker_install
 system_puppeteer_dependencies
