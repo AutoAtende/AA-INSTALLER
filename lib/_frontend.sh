@@ -94,7 +94,6 @@ REACT_APP_HOURS_CLOSE_TICKETS_AUTO=24
 REACT_APP_PAGE_TITLE=AutoAtende
 REACT_APP_LOCALE=pt-br
 REACT_APP_TIMEZONE=America/Sao_Paulo
-PORT=${frontend_port}
 [-]EOF
 EOF
 
@@ -102,33 +101,15 @@ EOF
 
 sudo su - deploy << EOF
   cat <<[-]EOF > /home/deploy/${instancia_add}/frontend/server.js
-require('dotenv').config();
-require('dotenv').config();
+//simple express server to run frontend production build;
 const express = require("express");
 const path = require("path");
 const app = express();
-const compression = require('compression');
-const helmet = require('helmet');
-
-app.use(helmet());
-app.use(compression());
-
-app.use(express.json({ limit: '128mb' }));
-app.use(express.urlencoded({ limit: '128mb', extended: true }));
-
-app.use((req, res, next) => {
-  res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("X-Frame-Options", "DENY");
-  res.setHeader("X-XSS-Protection", "1; mode=block");
-  next();
-});
-
 app.use(express.static(path.join(__dirname, "build")));
 app.get("/*", function (req, res) {
-        res.sendFile(path.join(__dirname, "build", "index.html"));
+	res.sendFile(path.join(__dirname, "build", "index.html"));
 });
-app.listen(process.env.PORT);
+app.listen(${frontend_port});
 
 [-]EOF
 EOF
