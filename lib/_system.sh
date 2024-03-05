@@ -471,6 +471,26 @@ EOF
 }
 
 #######################################
+# set timezone
+# Arguments:
+#   None
+#######################################
+system_set_timezone() {
+  print_banner
+  printf "${WHITE} 💻 Definindo a timezone...${GRAY_LIGHT}"
+  printf "\n\n"
+
+  sleep 2
+
+  sudo su - root <<EOF
+  timedatectl set-timezone America/Sao_Paulo
+EOF
+
+  sleep 2
+}
+
+
+#######################################
 # installs snapd
 # Arguments:
 #   None
