@@ -205,7 +205,7 @@ backup() {
 inquiry_options() {
   
   print_banner
-  printf "${WHITE} 💻 Bem vindo(a) ao Gerenciador AutoAtende - Atendimento sem limites, selecione abaixo a proxima ação!${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Bem vindo(a) ao AutoAtende selecione abaixo a proxima ação!${GRAY_LIGHT}"
   printf "\n\n"
   printf "   [0] Instalar AutoAtende\n"
   printf "   [1] Atualizar AutoAtende\n"
