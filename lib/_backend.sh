@@ -68,9 +68,6 @@ DB_PASS=${mysql_root_password}
 DB_NAME=${instancia_add}
 DB_PORT=5432
 
-JWT_SECRET=${jwt_secret}
-JWT_REFRESH_SECRET=${jwt_refresh_secret}
-
 REDIS_URI=redis://:${mysql_root_password}@127.0.0.1:${redis_port}
 REDIS_OPT_LIMITER_MAX=1
 REDIS_OPT_LIMITER_DURATION=3000
