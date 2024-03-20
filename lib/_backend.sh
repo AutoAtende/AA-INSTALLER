@@ -87,6 +87,9 @@ GERENCIANET_CLIENT_SECRET=sua_chave_secreta
 GERENCIANET_PIX_CERT=nome_do_certificado
 GERENCIANET_PIX_KEY=chave_pix_gerencianet
 
+FACEBOOK_APP_ID=
+FACEBOOK_APP_SECRET=
+
 [-]EOF
 EOF
 
