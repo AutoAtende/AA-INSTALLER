@@ -60,6 +60,7 @@ frontend_update() {
   git pull
   cd /home/deploy/${empresa_atualizar}/frontend
   npm install
+  npm install express helmet express-rate-limit
   rm -rf build
   npm run build
   pm2 start ${empresa_atualizar}-frontend
@@ -94,6 +95,16 @@ REACT_APP_HOURS_CLOSE_TICKETS_AUTO=24
 REACT_APP_PAGE_TITLE=AutoAtende
 REACT_APP_LOCALE=pt-br
 REACT_APP_TIMEZONE=America/Sao_Paulo
+REACT_APP_TRIALEXPIRATION = 7
+REACT_APP_PLANIDDEFAULT = 
+REACT_APP_LOGO = 
+REACT_APP_COLOR_TOOLBAR = 
+REACT_APP_COPYRIGHT = 
+REACT_APP_COPYRIGHT_YEAR = 
+REACT_APP_COPYRIGHT_URL = 
+REACT_APP_MANUAL_URL = 
+REACT_APP_FACEBOOK_APP_ID =
+PORT = 3000
 [-]EOF
 EOF
 
@@ -101,15 +112,43 @@ EOF
 
 sudo su - deploy << EOF
   cat <<[-]EOF > /home/deploy/${instancia_add}/frontend/server.js
-//simple express server to run frontend production build;
 const express = require("express");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const path = require("path");
+
 const app = express();
-app.use(express.static(path.join(__dirname, "build")));
-app.get("/*", function (req, res) {
-	res.sendFile(path.join(__dirname, "build", "index.html"));
+
+// Aplicar o Helmet para segurança básica
+app.use(helmet());
+
+// Limitador de taxa de requisições para prevenir ataques de força bruta e DDoS
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutos
+	max: 100, // limite cada IP a 100 requisições por janela (aqui definida em 15 minutos)
+	standardHeaders: true, // Retorna informações de limite de taxa nos cabeçalhos `RateLimit-*`
+	legacyHeaders: false, // Desabilita os cabeçalhos `X-RateLimit-*`
 });
-app.listen(${frontend_port});
+
+// Aplicar o limitador de taxa a todas as requisições
+app.use(limiter);
+
+// Servir arquivos estáticos de forma segura
+app.use(express.static(path.join(__dirname, "build"), {
+	dotfiles: 'deny', // Não permitir acesso a arquivos dotfiles
+	index: false, // Desabilitar listagem de diretório
+}));
+
+// Rota para servir o frontend
+app.get("/*", function (req, res) {
+	res.sendFile(path.join(__dirname, "build", "index.html"), {
+		dotfiles: 'deny', // Mesma regra para arquivos dotfiles aqui
+	});
+});
+
+// Iniciar o servidor
+const PORT = process.env.PORT || ${frontend_port};
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${frontend_port}`));
 
 [-]EOF
 EOF

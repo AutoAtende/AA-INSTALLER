@@ -351,11 +351,6 @@ sudo ufw allow ssh
 sudo ufw allow 22
 sudo ufw allow 80
 sudo ufw allow 443
-sudo ufw allow 3000/tcp
-sudo ufw allow 4000/tcp
-sudo ufw allow 5000/tcp
-sudo ufw allow 5432/tcp
-sudo ufw allow 6379/tcp
 sudo ufw enable
 EOF
 
