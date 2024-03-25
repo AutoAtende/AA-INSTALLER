@@ -17,7 +17,6 @@ frontend_node_dependencies() {
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/frontend
   npm install
-  npm install express helmet express-rate-limit
 EOF
 
   sleep 2
@@ -61,7 +60,6 @@ frontend_update() {
   git pull
   cd /home/deploy/${empresa_atualizar}/frontend
   npm install
-  npm install express helmet
   rm -rf build
   npm run build
   pm2 start ${empresa_atualizar}-frontend
@@ -114,28 +112,21 @@ EOF
 sudo su - deploy << EOF
   cat <<[-]EOF > /home/deploy/${instancia_add}/frontend/server.js
 const express = require("express");
-const helmet = require("helmet");
 const path = require("path");
 
 const app = express();
 
-// Aplicar o Helmet para segurança básica
-app.use(helmet());
-
-// Servir arquivos estáticos de forma segura
 app.use(express.static(path.join(__dirname, "build"), {
 	dotfiles: 'deny', // Não permitir acesso a arquivos dotfiles
 	index: false, // Desabilitar listagem de diretório
 }));
 
-// Rota para servir o frontend
 app.get("/*", function (req, res) {
 	res.sendFile(path.join(__dirname, "build", "index.html"), {
 		dotfiles: 'deny', // Mesma regra para arquivos dotfiles aqui
 	});
 });
 
-// Iniciar o servidor
 const PORT = process.env.PORT || ${frontend_port};
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${frontend_port}`));
 
