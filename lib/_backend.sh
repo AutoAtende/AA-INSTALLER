@@ -90,6 +90,11 @@ GERENCIANET_PIX_KEY=chave_pix_gerencianet
 FACEBOOK_APP_ID=
 FACEBOOK_APP_SECRET=
 
+STRIPE_PUB=
+STRIPE_PRIVATE=
+STRIPE_OK_URL=${frontend_url}/financeiro
+STRIPE_CANCEL_URL=${frontend_url}/financeiro
+
 [-]EOF
 EOF
 
@@ -154,8 +159,7 @@ backend_update() {
   git pull
   cd /home/deploy/${empresa_atualizar}/backend
   npm install
-  npm update -f
-  npm install @types/fs-extra
+  npm update
   rm -rf dist 
   npm run build
   npx sequelize db:migrate
