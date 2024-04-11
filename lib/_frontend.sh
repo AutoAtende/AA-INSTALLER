@@ -88,8 +88,8 @@ frontend_set_env() {
   backend_url=${backend_url%%/*}
   backend_url=https://$backend_url
 
-sudo su - deploy << EOF
-  cat <<[-]EOF > /home/deploy/${instancia_add}/frontend/.env
+sudo su - deploy << EOF1
+  cat <<-EOF2 > /home/deploy/${instancia_add}/frontend/.env
 REACT_APP_BACKEND_URL=${backend_url}
 REACT_APP_HOURS_CLOSE_TICKETS_AUTO=24
 REACT_APP_PAGE_TITLE=AutoAtende
@@ -98,13 +98,13 @@ REACT_APP_TIMEZONE=America/Sao_Paulo
 REACT_APP_TRIALEXPIRATION=7
 REACT_APP_FACEBOOK_APP_ID=
 PORT=${frontend_port}
-[-]EOF
-EOF
+EOF2
+EOF1
 
   sleep 2
 
-sudo su - deploy << EOF
-  cat <<[-]EOF > /home/deploy/${instancia_add}/frontend/server.js
+sudo su - deploy << EOF1
+  cat <<-EOF2 > /home/deploy/${instancia_add}/frontend/server.js
 const express = require("express");
 const path = require("path");
 
@@ -124,8 +124,8 @@ app.get("/*", function (req, res) {
 const PORT = process.env.PORT || ${frontend_port};
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${frontend_port}`));
 
-[-]EOF
-EOF
+EOF2
+EOF1
 
   sleep 2
 }
