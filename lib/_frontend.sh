@@ -105,24 +105,15 @@ EOF
 
 sudo su - deploy << EOF
   cat <<[-]EOF > /home/deploy/${instancia_add}/frontend/server.js
+//simple express server to run frontend production build;
 const express = require("express");
 const path = require("path");
-
 const app = express();
-
-app.use(express.static(path.join(__dirname, "build"), {
-	dotfiles: 'deny', // Não permitir acesso a arquivos dotfiles
-	index: false, // Desabilitar listagem de diretório
-}));
-
+app.use(express.static(path.join(__dirname, "build")));
 app.get("/*", function (req, res) {
-	res.sendFile(path.join(__dirname, "build", "index.html"), {
-		dotfiles: 'deny', // Mesma regra para arquivos dotfiles aqui
-	});
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
-
-const PORT = process.env.PORT || ${frontend_port};
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${frontend_port}`));
+app.listen(${frontend_port});
 
 [-]EOF
 EOF
