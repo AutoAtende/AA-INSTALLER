@@ -154,10 +154,19 @@ get_alter_backend_port() {
   read -p "> " alter_backend_port
 }
 
+get_branch_name() {
+
+  print_banner
+  printf "${WHITE} 💻 Digite o nome da branch a ser clonada (main):${GRAY_LIGHT}"
+  printf "\n\n"
+  read -p "> " branch_name
+}
+
 
 get_urls() {
   get_mysql_root_password
   get_link_git
+  get_branch_name
   get_instancia_add
   get_max_whats
   get_max_user
@@ -198,9 +207,6 @@ software_dominio() {
   configurar_dominio
 }
 
-backup() {
-  executar_backup
-}
 
 inquiry_options() {
   
@@ -213,7 +219,6 @@ inquiry_options() {
   printf "   [3] Bloquear AutoAtende\n"
   printf "   [4] Desbloquear AutoAtende\n"
   printf "   [5] Alter. dominio AutoAtende\n"
-  printf "   [6] Backup BD AutoAtende\n"
   printf "\n"
   read -p "> " option
 
@@ -240,12 +245,7 @@ inquiry_options() {
     5) 
       software_dominio 
       exit
-      ;;    
-    6) 
-      backup 
-      exit
       ;;            
-
     *) exit ;;
   esac
 }
