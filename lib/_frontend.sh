@@ -127,7 +127,7 @@ server {
   index index.html index.htm index.nginx-debian.html;
 
 location / {
-      try_files $uri /index.html;
+      try_files \$uri /index.html;
   }
 }
 END
