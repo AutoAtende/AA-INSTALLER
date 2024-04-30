@@ -126,8 +126,8 @@ server {
   root /home/deploy/${instancia_add}/frontend/build;
   index index.html index.htm index.nginx-debian.html;
 
-  location / {
-      try_files \$uri \$uri/ = 404;
+location / {
+      try_files $uri /index.html;
   }
 }
 END
