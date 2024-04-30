@@ -95,7 +95,7 @@ sleep 2
 
 sudo su - deploy <<EOF
  rm -rf /home/deploy/${empresa_delete}
- pm2 delete ${empresa_delete}-frontend ${empresa_delete}-backend
+ pm2 delete ${empresa_delete}-backend
  pm2 save
 EOF
 
@@ -221,23 +221,22 @@ sleep 2
 frontend_hostname=$(echo "${alter_frontend_url/https:\/\/}")
 
 sudo su - root << EOF
-cat > /etc/nginx/sites-available/${empresa_dominio}-frontend << 'END'
+
+cat > /etc/nginx/sites-available/${instancia_add}-frontend << 'END'
+
 server {
   server_name $frontend_hostname;
+  
+  root /home/deploy/${instancia_add}/frontend/build;
+  index index.html index.htm index.nginx-debian.html;
+
   location / {
-    proxy_pass http://127.0.0.1:${alter_frontend_port};
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade \$http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_set_header Host \$host;
-    proxy_set_header X-Real-IP \$remote_addr;
-    proxy_set_header X-Forwarded-Proto \$scheme;
-    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    proxy_cache_bypass \$http_upgrade;
+      try_files \$uri \$uri/ = 404;
   }
 }
 END
-ln -s /etc/nginx/sites-available/${empresa_dominio}-frontend /etc/nginx/sites-enabled
+
+ln -s /etc/nginx/sites-available/${instancia_add}-frontend /etc/nginx/sites-enabled
 EOF
 
  sleep 2
@@ -281,7 +280,7 @@ system_node_install() {
   sleep 2
 
   sudo su - root <<EOF
-  curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+  curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
   apt-get install -y nodejs
   sleep 2
   npm install -g npm@latest
@@ -383,26 +382,7 @@ EOF
   sleep 2
 }
 
-#######################################
-# Ask for file location containing
-# multiple URL for streaming.
-# Globals:
-#   WHITE
-#   GRAY_LIGHT
-#   BATCH_DIR
-#   PROJECT_ROOT
-# Arguments:
-#   None
-#######################################
-system_puppeteer_dependencies() {
-  print_banner
-  printf "${WHITE} 💻 Instalando puppeteer dependencies...${GRAY_LIGHT}"
-  printf "\n\n"
-
-  sleep 2
-}
-
-#######################################
+##################################
 # installs pm2
 # Arguments:
 #   None

@@ -44,7 +44,6 @@ system_fail2ban_conf
 system_firewall_conf
 system_pm2_install
 system_docker_install
-system_puppeteer_dependencies
 system_snapd_install
 system_nginx_install
 system_certbot_install
@@ -67,7 +66,6 @@ backend_nginx_setup
 frontend_set_env
 frontend_node_dependencies
 frontend_node_build
-frontend_start_pm2
 frontend_nginx_setup
 
 # network related

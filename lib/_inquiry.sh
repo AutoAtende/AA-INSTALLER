@@ -56,15 +56,6 @@ get_backend_url() {
   read -p "> " backend_url
 }
 
-get_frontend_port() {
-  
-  print_banner
-  printf "${WHITE} 💻 Digite a porta do FRONTEND para a ${instancia_add}; Ex: 3000 A 3999 ${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " frontend_port
-}
-
-
 get_backend_port() {
   
   print_banner
@@ -137,15 +128,6 @@ get_alter_backend_url() {
   read -p "> " alter_backend_url
 }
 
-get_alter_frontend_port() {
-  
-  print_banner
-  printf "${WHITE} 💻 Digite a porta do FRONTEND da Instancia/Empresa ${empresa_dominio}; A porta deve ser o mesma informada durante a instalação ${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " alter_frontend_port
-}
-
-
 get_alter_backend_port() {
   
   print_banner
@@ -162,7 +144,6 @@ get_branch_name() {
   read -p "> " branch_name
 }
 
-
 get_urls() {
   get_mysql_root_password
   get_link_git
@@ -172,7 +153,6 @@ get_urls() {
   get_max_user
   get_frontend_url
   get_backend_url
-  get_frontend_port
   get_backend_port
   get_redis_port
 }
@@ -202,7 +182,6 @@ software_dominio() {
   get_empresa_dominio
   get_alter_frontend_url
   get_alter_backend_url
-  get_alter_frontend_port
   get_alter_backend_port
   configurar_dominio
 }
