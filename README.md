@@ -9,8 +9,8 @@ sudo apt install -y git && git clone https://github.com/AutoAtende/aa-max-instal
 
 | --- | Mínimo | Recomendado |
 | --- | --- | --- |
-| Node JS 16.x | 18.x |
-| Ubuntu | Auto 18.x | Manual 18.x |
+| Node | 18.x | 20.x |
+| Ubuntu | Auto 20.x | Manual 22.x |
 | Memória RAM | 4Gb | 8Gb |  
 
 ## 🗿 Instalação Manual -------------------------------------------------
