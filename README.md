@@ -230,6 +230,12 @@ CLOSED_SEND_BY_ME=true
 
 FACEBOOK_APP_ID=
 FACEBOOK_APP_SECRET=
+
+MAIL_HOST=
+MAIL_USER=
+MAIL_PASS=
+MAIL_FROM=
+MAIL_PORT=
 ```
 
 ### roda o build e sobe as migrations e seeds
