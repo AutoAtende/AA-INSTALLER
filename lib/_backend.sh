@@ -73,6 +73,9 @@ CHATBOT_RESTRICT_NUMBER=
 REDIS_URI=redis://:${mysql_root_password}@127.0.0.1:${redis_port}
 REDIS_OPT_LIMITER_MAX=1
 REDIS_OPT_LIMITER_DURATION=3000
+REDIS_HOST=127.0.0.1
+REDIS_PORT=${redis_port}
+REDIS_PASSWORD=${mysql_root_password}
 
 USER_LIMIT=${max_user}
 CONNECTIONS_LIMIT=${max_whats}
