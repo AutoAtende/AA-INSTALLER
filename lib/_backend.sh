@@ -15,7 +15,7 @@ backend_redis_create() {
 
   sudo su - root <<EOF
   usermod -aG docker deploy
-  docker run --name redis-${instancia_add} -p ${redis_port}:6379 --restart always --detach redis redis-server --requirepass ${mysql_root_password}
+  docker run --name redis-${instancia_add} -p ${redis_port}:${redis_port} --restart always --detach redis redis-server --requirepass ${mysql_root_password}
   
   sleep 2
   sudo su - postgres
@@ -69,6 +69,8 @@ DB_NAME=${instancia_add}
 DB_PORT=5432
 
 CHATBOT_RESTRICT_NUMBER=
+
+APP_TRIALEXPIRATION=7
 
 REDIS_URI=redis://:${mysql_root_password}@127.0.0.1:${redis_port}
 REDIS_OPT_LIMITER_MAX=1
@@ -158,7 +160,7 @@ backend_update() {
   rm -rf dist 
   npm run build
   npx sequelize db:migrate
-  npx sequelize db:seed
+  npx sequelize db:seed:all
   pm2 start ${empresa_atualizar}-backend
   pm2 save 
 EOF
