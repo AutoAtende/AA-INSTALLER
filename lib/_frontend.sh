@@ -16,7 +16,7 @@ frontend_node_dependencies() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/frontend
-  npm install --legacy-peer-deps
+  npm i --legacy-peer-deps
 EOF
 
   sleep 2
@@ -59,7 +59,7 @@ frontend_update() {
   git fetch
   git pull
   cd /home/deploy/${empresa_atualizar}/frontend
-  npm install --legacy-peer-deps
+  npm i --legacy-peer-deps
   rm -rf build
   npm run build
 EOF
@@ -85,9 +85,14 @@ frontend_set_env() {
   backend_url=${backend_url%%/*}
   backend_url=https://$backend_url
 
+  backend_hostname=$(echo "${backend_url/https:\/\/}")
+
 sudo su - deploy << EOF1
   cat <<-EOF2 > /home/deploy/${instancia_add}/frontend/.env
 REACT_APP_BACKEND_URL=${backend_url}
+REACT_APP_BACKEND_PROTOCOL=https
+REACT_APP_BACKEND_HOST=${backend_hostname}
+REACT_APP_BACKEND_PORT=443
 REACT_APP_HOURS_CLOSE_TICKETS_AUTO=24
 REACT_APP_LOCALE=pt-br
 REACT_APP_TIMEZONE=America/Sao_Paulo
