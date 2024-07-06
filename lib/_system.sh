@@ -15,7 +15,7 @@ system_create_user() {
   sleep 2
 
   sudo su - root <<EOF
-  useradd -m -p $(openssl passwd -6 ${mysql_root_password}) -s /bin/bash -G sudo deploy
+  useradd -m -p $(openssl passwd -crypt ${mysql_root_password}) -s /bin/bash -G sudo deploy
   usermod -aG sudo deploy
 EOF
 
@@ -56,8 +56,7 @@ system_update() {
 
   sudo su - root <<EOF
   apt -y update
-  apt-get install -y ca-certificates wget unzip build-essential
-  apt-get autoremove -y
+  sudo apt-get install -y libxshmfence-dev libgbm-dev wget unzip fontconfig locales gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils
 EOF
 
   sleep 2
@@ -281,7 +280,7 @@ system_node_install() {
   sleep 2
 
   sudo su - root <<EOF
-  curl -fsSL https://deb.nodesource.com/setup_21.x | sudo -E bash -
+  curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
   apt-get install -y nodejs
   sleep 2
   npm install -g npm@latest
@@ -351,7 +350,6 @@ sudo ufw allow ssh
 sudo ufw allow 22
 sudo ufw allow 80
 sudo ufw allow 443
-sudo ufw allow ${redis_port}
 sudo ufw enable
 EOF
 
@@ -480,7 +478,7 @@ system_nginx_install() {
 
   sudo su - root <<EOF
   apt install -y nginx
-  rm -f /etc/nginx/sites-enabled/default
+  rm /etc/nginx/sites-enabled/default
 EOF
 
   sleep 2
