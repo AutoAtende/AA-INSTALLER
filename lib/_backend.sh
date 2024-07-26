@@ -53,9 +53,15 @@ backend_set_env() {
   frontend_url=${frontend_url%%/*}
   frontend_url=https://$frontend_url
 
+  # Gera JWT_SECRET
+  JWT_SECRET=$(openssl rand -hex 32)
+
+  # Gera JWT_REFRESH_SECRET
+  JWT_REFRESH_SECRET=$(openssl rand -hex 32)
+
 sudo su - deploy << EOF
   cat <<[-]EOF > /home/deploy/${instancia_add}/backend/.env
-NODE_ENV=
+NODE_ENV=production
 BACKEND_URL=${backend_url}
 FRONTEND_URL=${frontend_url}
 PROXY_PORT=443
@@ -72,7 +78,6 @@ TIMEOUT_TO_IMPORT_MESSAGE=999
 FLUSH_REDIS_ON_START=true
 DEBUG_TRACE=false
 CHATBOT_RESTRICT_NUMBER=
-APP_TRIALEXPIRATION=7
 BROWSER_CLIENT=AutoAtende  
 BROWSER_NAME=Chrome  
 BROWSER_VERSION=10.0
@@ -86,16 +91,12 @@ REDIS_PASSWORD=${mysql_root_password}
 
 USER_LIMIT=${max_user}
 CONNECTIONS_LIMIT=${max_whats}
-CLOSED_SEND_BY_ME=true
 
 FACEBOOK_APP_ID=
 FACEBOOK_APP_SECRET=
 
-MAIL_HOST=
-MAIL_USER=
-MAIL_PASS=
-MAIL_FROM=
-MAIL_PORT=
+JWT_SECRET=${JWT_SECRET}
+JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
 
 [-]EOF
 EOF
@@ -117,7 +118,7 @@ backend_node_dependencies() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  npm install
+  npm i
 EOF
 
   sleep 2
@@ -160,7 +161,7 @@ backend_update() {
   pm2 stop ${empresa_atualizar}-backend
   git pull
   cd /home/deploy/${empresa_atualizar}/backend
-  npm install
+  npm i
   npm update
   rm -rf dist 
   npm run build
