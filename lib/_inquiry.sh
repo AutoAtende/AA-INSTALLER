@@ -8,14 +8,6 @@ get_mysql_root_password() {
   read -p "> " mysql_root_password
 }
 
-get_link_git() {
-  
-  print_banner
-  printf "${WHITE} 💻 Insira o link do GITHUB do seu AutoAtende que deseja instalar:${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " link_git
-}
-
 get_instancia_add() {
   
   print_banner
@@ -136,18 +128,17 @@ get_alter_backend_port() {
   read -p "> " alter_backend_port
 }
 
-get_branch_name() {
+get_token_code() {
 
   print_banner
-  printf "${WHITE} 💻 Digite o nome da branch a ser clonada (main):${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Digite o token para baixar o código:${GRAY_LIGHT}"
   printf "\n\n"
-  read -p "> " branch_name
+  read -p "> " token_code
 }
 
 get_urls() {
   get_mysql_root_password
-  get_link_git
-  get_branch_name
+  get_token_code
   get_instancia_add
   get_max_whats
   get_max_user
