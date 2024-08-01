@@ -36,7 +36,7 @@ system_git_clone() {
   sleep 2
 
 sudo su - deploy <<EOF
-  git clone -b feat-api-routes https://lucassaud:${token_code}@github.com/AutoAtende/AA-150.git /home/deploy/${instancia_add}
+  git clone -b demo https://lucassaud:${token_code}@github.com/AutoAtende/AA-150.git /home/deploy/${instancia_add}
 EOF
 
 
