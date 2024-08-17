@@ -63,10 +63,10 @@ sudo ufw allow 6379
 sudo ufw enable
 ```
 
-## Instalando NodeJS 22...
+## Instalando NodeJS 20...
 
 ```javascript
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt install -y nodejs
 ```
 
