@@ -79,6 +79,7 @@ deletar_tudo() {
   sleep 2
 
   sudo su - root <<EOF
+  docker container stop redis-${empresa_delete}
   docker container rm redis-${empresa_delete} --force
   cd && rm -rf /etc/nginx/sites-enabled/${empresa_delete}-frontend
   cd && rm -rf /etc/nginx/sites-enabled/${empresa_delete}-backend  
@@ -125,7 +126,7 @@ configurar_bloqueio() {
   sleep 2
 
 sudo su - deploy <<EOF
- pm2 stop ${empresa_bloquear}-backend
+ pm2 stop ${empresa_bloquear}-backend --watch --ignore-watch="node_modules public"
  pm2 save
 EOF
 
@@ -152,7 +153,7 @@ configurar_desbloqueio() {
   sleep 2
 
 sudo su - deploy <<EOF
- pm2 start ${empresa_bloquear}-backend
+ pm2 start ${empresa_bloquear}-backend --update-env --node-args="--max-old-space-size=8192" --max-memory-restart 8000M --watch --ignore-watch="node_modules"
  pm2 save
 EOF
 

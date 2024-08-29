@@ -157,7 +157,7 @@ backend_update() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${empresa_atualizar}
-  pm2 stop ${empresa_atualizar}-backend
+  pm2 stop ${empresa_atualizar}-backend --watch --ignore-watch="node_modules public"
   pm2 del ${empresa_atualizar}-backend
   git pull
   cd /home/deploy/${empresa_atualizar}/backend
@@ -167,7 +167,7 @@ backend_update() {
   npm run build
   npx sequelize db:migrate
   npx sequelize db:seed:all
-  pm2 start dist/server.js --name ${empresa_atualizar}-backend --node-args="--max-old-space-size=8192" --watch --max-memory-restart 8000M
+  pm2 start dist/server.js --name ${empresa_atualizar}-backend --update-env --node-args="--max-old-space-size=8192" --max-memory-restart 8000M --watch --ignore-watch="node_modules public"
   pm2 save 
 EOF
 
@@ -229,7 +229,8 @@ backend_start_pm2() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  pm2 start dist/server.js --name ${instancia_add}-backend --node-args="--max-old-space-size=8192" --watch --max-memory-restart 8000M
+  pm2 start dist/server.js --name ${instancia_add}-backend --update-env --node-args="--max-old-space-size=8192" --max-memory-restart 8000M --watch --ignore-watch="node_modules public"
+
 EOF
 
   sudo su - root <<EOF
