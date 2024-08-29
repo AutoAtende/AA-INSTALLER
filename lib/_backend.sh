@@ -232,6 +232,11 @@ backend_start_pm2() {
   pm2 start dist/server.js --name ${instancia_add}-backend --node-args="--max-old-space-size=8192" --watch --max-memory-restart 8000M
 EOF
 
+  sudo su - root <<EOF
+   pm2 startup
+  sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
+EOF
+
   sleep 2
 }
 
