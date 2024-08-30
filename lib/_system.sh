@@ -283,6 +283,9 @@ system_node_install() {
   sleep 2
 
   sudo su - root <<EOF
+  echo 'vm.overcommit_memory = 1' | sudo tee -a /etc/sysctl.conf
+  echo 'fs.inotify.max_user_watches=524288' | sudo tee -a /etc/sysctl.conf
+  sudo sysctl -p
   curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
   apt-get install -y nodejs
   sleep 2
