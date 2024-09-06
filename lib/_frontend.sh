@@ -59,6 +59,7 @@ frontend_update() {
   git fetch
   git pull
   cd /home/deploy/${empresa_atualizar}/frontend
+  rm -rf node_modules
   npm install --legacy-peer-deps
   rm -rf build
   npm run build
@@ -127,7 +128,7 @@ server {
   server_name $frontend_hostname;
   
   root /home/deploy/${instancia_add}/frontend/build;
-  index index.html index.htm index.nginx-debian.html;
+  index index.html
 
 location / {
       try_files \$uri /index.html;
