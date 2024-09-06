@@ -15,7 +15,7 @@ backend_redis_create() {
 
   sudo su - root <<EOF
   usermod -aG docker deploy
-  docker run -d --name redis-${instancia_add} -p ${redis_port}:6379 redis:latest redis-server --maxmemory 2gb --maxmemory-policy noeviction --requirepass ${mysql_root_password} --maxclients 10000
+  docker run -d --name redis-${instancia_add} -p ${redis_port}:6379 redis:7.4 redis-server --maxmemory 2gb --maxmemory-policy noeviction --requirepass ${mysql_root_password} --maxclients 10000
   sleep 2
   sudo su - postgres
   createdb ${instancia_add};
@@ -167,7 +167,7 @@ backend_update() {
   npm run build
   npx sequelize db:migrate
   npx sequelize db:seed:all
-  pm2 start dist/server.js --name ${empresa_atualizar}-backend --update-env --node-args="--max-old-space-size=8192" --max-memory-restart 8000M --watch --ignore-watch="node_modules public"
+  pm2 start dist/server.js --name ${empresa_atualizar}-backend --update-env --node-args="--max-old-space-size=8192" --max-memory-restart 8000M
   pm2 save 
 EOF
 
@@ -229,7 +229,7 @@ backend_start_pm2() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  pm2 start dist/server.js --name ${instancia_add}-backend --update-env --node-args="--max-old-space-size=8192" --max-memory-restart 8000M --watch --ignore-watch="node_modules public"
+  pm2 start dist/server.js --name ${instancia_add}-backend --update-env --node-args="--max-old-space-size=8192" --max-memory-restart 8000M
 
 EOF
 
