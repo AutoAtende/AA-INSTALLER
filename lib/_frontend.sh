@@ -16,7 +16,7 @@ frontend_node_dependencies() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/frontend
-  npm i --legacy-peer-deps
+  npm install --legacy-peer-deps
 EOF
 
   sleep 2
@@ -59,7 +59,7 @@ frontend_update() {
   git fetch
   git pull
   cd /home/deploy/${empresa_atualizar}/frontend
-  npm i --legacy-peer-deps
+  npm install --legacy-peer-deps
   rm -rf build
   npm run build
 EOF
