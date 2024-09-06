@@ -116,7 +116,7 @@ backend_node_dependencies() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  npm i
+  npm install
 EOF
 
   sleep 2
@@ -161,12 +161,12 @@ backend_update() {
   git pull
   cd /home/deploy/${empresa_atualizar}/backend
   rm -rf node_modules
-  npm i
+  npm install
   rm -rf dist 
   npm run build
   npx sequelize db:migrate
   npx sequelize db:seed:all
-  pm2 start dist/server.js --name ${empresa_atualizar}-backend
+  NODE_ENV=production pm2 start dist/server.js --name ${empresa_atualizar}-backend
   pm2 save 
 EOF
 
@@ -228,7 +228,7 @@ backend_start_pm2() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  pm2 start dist/server.js --name ${instancia_add}-backend --update-env --node-args="--max-old-space-size=8192" --max-memory-restart 8000M
+  NODE_ENV=production pm2 start dist/server.js --name ${instancia_add}-backend --update-env
 
 EOF
 
