@@ -128,7 +128,7 @@ server {
   server_name $frontend_hostname;
   
   root /home/deploy/${instancia_add}/frontend/build;
-  index index.html
+  index index.html;
 
 location / {
       try_files \$uri /index.html;
