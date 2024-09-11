@@ -15,7 +15,8 @@ backend_redis_create() {
 
   sudo su - root <<EOF
   usermod -aG docker deploy
-  docker run -d --name redis-${instancia_add} -p ${redis_port}:6379 redis:7.4 redis-server --requirepass ${mysql_root_password}
+  docker run --name redis-${instancia_add} -p ${redis_port}:6379 --restart always --detach redis redis-server --requirepass ${mysql_root_password}
+  
   sudo su - postgres
   createdb ${instancia_add};
   psql
