@@ -97,6 +97,8 @@ FACEBOOK_APP_SECRET=
 JWT_SECRET=${JWT_SECRET}
 JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
 
+TOKEN_GITHUB=
+
 [-]EOF
 EOF
 
@@ -138,6 +140,7 @@ backend_node_build() {
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
   npm run build
+  rm -rf src
 EOF
 
   sleep 2
@@ -167,7 +170,7 @@ backend_update() {
   npm run build
   npx sequelize db:migrate
   npx sequelize db:seed:all
-  NODE_ENV=production pm2 start dist/server.js --name ${empresa_atualizar}-backend
+  NODE_ENV=production pm2 start dist/server.js --name ${empresa_atualizar}-backend --update-env --node-args="--max-old-space-size=4096"
   pm2 save 
 EOF
 
@@ -229,7 +232,7 @@ backend_start_pm2() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  NODE_ENV=production pm2 start dist/server.js --name ${instancia_add}-backend --update-env
+  NODE_ENV=production pm2 start dist/server.js --name ${instancia_add}-backend  --update-env --node-args="--max-old-space-size=4096"
 
 EOF
 
