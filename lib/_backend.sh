@@ -141,6 +141,7 @@ backend_node_build() {
   cd /home/deploy/${instancia_add}/backend
   npm run build
   rm -rf src
+  cp .env dist/
 EOF
 
   sleep 2
