@@ -231,7 +231,7 @@ server {
   server_name $frontend_hostname;
   
   root /home/deploy/${instancia_add}/frontend/build;
-  index index.html index.htm index.nginx-debian.html;
+  index index.html;
 
   location / {
       try_files \$uri \$uri/ = 404;
@@ -283,9 +283,6 @@ system_node_install() {
   sleep 2
 
   sudo su - root <<EOF
-  echo 'vm.overcommit_memory = 1' | sudo tee -a /etc/sysctl.conf
-  echo 'fs.inotify.max_user_watches=524288' | sudo tee -a /etc/sysctl.conf
-  sudo sysctl -p
   curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
   apt-get install -y nodejs
   sleep 2
