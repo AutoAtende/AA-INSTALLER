@@ -80,54 +80,6 @@ get_empresa_atualizar() {
   read -p "> " empresa_atualizar
 }
 
-get_empresa_bloquear() {
-  
-  print_banner
-  printf "${WHITE} 💻 Digite o nome da Instancia/Empresa que deseja Bloquear (Digite o mesmo nome de quando instalou):${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " empresa_bloquear
-}
-
-get_empresa_desbloquear() {
-  
-  print_banner
-  printf "${WHITE} 💻 Digite o nome da Instancia/Empresa que deseja Desbloquear (Digite o mesmo nome de quando instalou):${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " empresa_desbloquear
-}
-
-get_empresa_dominio() {
-  
-  print_banner
-  printf "${WHITE} 💻 Digite o nome da Instancia/Empresa que deseja Alterar os Dominios (Atenção para alterar os dominios precisa digitar os 2, mesmo que vá alterar apenas 1):${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " empresa_dominio
-}
-
-get_alter_frontend_url() {
-  
-  print_banner
-  printf "${WHITE} 💻 Digite o NOVO domínio do FRONTEND/PAINEL para a ${empresa_dominio}:${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " alter_frontend_url
-}
-
-get_alter_backend_url() {
-  
-  print_banner
-  printf "${WHITE} 💻 Digite o NOVO domínio do BACKEND/API para a ${empresa_dominio}:${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " alter_backend_url
-}
-
-get_alter_backend_port() {
-  
-  print_banner
-  printf "${WHITE} 💻 Digite a porta do BACKEND da Instancia/Empresa ${empresa_dominio}; A porta deve ser o mesma informada durante a instalação ${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " alter_backend_port
-}
-
 get_token_code() {
 
   print_banner
@@ -159,24 +111,6 @@ software_delete() {
   deletar_tudo
 }
 
-software_bloquear() {
-  get_empresa_bloquear
-  configurar_bloqueio
-}
-
-software_desbloquear() {
-  get_empresa_desbloquear
-  configurar_desbloqueio
-}
-
-software_dominio() {
-  get_empresa_dominio
-  get_alter_frontend_url
-  get_alter_backend_url
-  get_alter_backend_port
-  configurar_dominio
-}
-
 
 inquiry_options() {
   
@@ -186,9 +120,6 @@ inquiry_options() {
   printf "   [0] Instalar AutoAtende\n"
   printf "   [1] Atualizar AutoAtende\n"
   printf "   [2] Deletar AutoAtende\n"
-  printf "   [3] Bloquear AutoAtende\n"
-  printf "   [4] Desbloquear AutoAtende\n"
-  printf "   [5] Alter. dominio AutoAtende\n"
   printf "\n"
   read -p "> " option
 
@@ -203,19 +134,7 @@ inquiry_options() {
     2) 
       software_delete 
       exit
-      ;;
-    3) 
-      software_bloquear 
-      exit
-      ;;
-    4) 
-      software_desbloquear 
-      exit
-      ;;
-    5) 
-      software_dominio 
-      exit
-      ;;            
+      ;;       
     *) exit ;;
   esac
 }

@@ -161,14 +161,17 @@ backend_update() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${empresa_atualizar}
+  git reset --hard
+  git pull
   pm2 stop ${empresa_atualizar}-backend
   pm2 del ${empresa_atualizar}-backend
-  git pull
-  cd /home/deploy/${empresa_atualizar}/backend
+  cd backend
   rm -rf node_modules
   npm install
   rm -rf dist 
   npm run build
+  cp .env dist/
+  rm -rf src
   npx sequelize db:migrate
   npx sequelize db:seed:all
   NODE_ENV=production pm2 start dist/server.js --name ${empresa_atualizar}-backend --update-env --node-args="--max-old-space-size=4096"
