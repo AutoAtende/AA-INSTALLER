@@ -56,13 +56,12 @@ frontend_update() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${empresa_atualizar}
-  git fetch
-  git pull
   cd /home/deploy/${empresa_atualizar}/frontend
   rm -rf node_modules
   npm install --legacy-peer-deps
   rm -rf build
   npm run build
+  rm -rf src
 EOF
 
   sleep 2
@@ -98,7 +97,6 @@ REACT_APP_HOURS_CLOSE_TICKETS_AUTO=24
 REACT_APP_LOCALE=pt-br
 REACT_APP_TIMEZONE=America/Sao_Paulo
 REACT_APP_FACEBOOK_APP_ID=
-REACT_APP_REQUIRE_JUSTIFICATION_TO_CLOSE=false
 EOF2
 EOF1
 
