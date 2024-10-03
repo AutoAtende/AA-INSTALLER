@@ -61,7 +61,6 @@ frontend_update() {
   npm install --legacy-peer-deps
   rm -rf build
   npm run build
-  rm -rf src
 EOF
 
   sleep 2
