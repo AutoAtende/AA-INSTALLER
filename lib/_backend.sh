@@ -119,7 +119,19 @@ backend_node_dependencies() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  npm install
+  
+  printf "${CYAN_LIGHT}Limpando cache do npm...${NC}\n"
+  npm cache clean --force
+  
+  printf "${CYAN_LIGHT}Iniciando instalação das dependências...${NC}\n"
+  npm install --verbose 2>&1 | tee npm_install.log
+  
+  if [ $? -eq 0 ]; then
+    printf "${GREEN}Instalação das dependências concluída com sucesso!${NC}\n"
+  else
+    printf "${RED}Erro na instalação das dependências. Verifique o arquivo npm_install.log para mais detalhes.${NC}\n"
+    exit 1
+  fi
 EOF
 
   sleep 2

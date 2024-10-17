@@ -17,6 +17,9 @@ system_create_user() {
   sudo su - root <<EOF
   useradd -m -p $(openssl passwd -6 ${mysql_root_password}) -s /bin/bash -G sudo deploy
   usermod -aG sudo deploy
+  echo 'export NVM_DIR="\$HOME/.nvm"' >> /home/deploy/.bashrc
+  echo '[ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"' >> /home/deploy/.bashrc
+  echo '[ -s "\$NVM_DIR/bash_completion" ] && \. "\$NVM_DIR/bash_completion"' >> /home/deploy/.bashrc
 EOF
 
   sleep 2
@@ -126,17 +129,22 @@ system_node_install() {
   sleep 2
 
   sudo su - root <<EOF
-  curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-  apt-get install -y nodejs
-  sleep 2
-  npm install -g npm@latest
-  sleep 2
-  sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-  wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-  sudo apt-get update -y
-  sudo apt-get -y install postgresql-16
-  sleep 2
-  sudo timedatectl set-timezone America/Sao_Paulo
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs=20.17.0-1nodesource1
+sleep 2
+
+sudo npm install -g npm@latest
+sleep 2
+
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+sudo apt-get update -y
+
+sudo apt-get -y install postgresql-16
+sleep 2
+
+sudo timedatectl set-timezone America/Sao_Paulo
 EOF
 
   sleep 2
@@ -395,7 +403,6 @@ system_certbot_setup() {
           --agree-tos \
           --non-interactive \
           --domains $backend_domain,$frontend_domain
-
 EOF
 
   sleep 2
