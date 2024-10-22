@@ -124,14 +124,7 @@ backend_node_dependencies() {
   npm cache clean --force
   
   printf "${CYAN_LIGHT}Iniciando instalação das dependências...${NC}\n"
-  npm install --verbose 2>&1 | tee npm_install.log
-  
-  if [ $? -eq 0 ]; then
-    printf "${GREEN}Instalação das dependências concluída com sucesso!${NC}\n"
-  else
-    printf "${RED}Erro na instalação das dependências. Verifique o arquivo npm_install.log para mais detalhes.${NC}\n"
-    exit 1
-  fi
+  npm install
 EOF
 
   sleep 2
@@ -172,8 +165,8 @@ backend_update() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${empresa_atualizar}
-  git reset --hard
-  git pull
+  git reset --hard origin/main
+  git pull origin main
   pm2 stop ${empresa_atualizar}-backend
   pm2 del ${empresa_atualizar}-backend
   cd backend
