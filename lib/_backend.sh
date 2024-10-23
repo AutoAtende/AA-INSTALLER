@@ -240,7 +240,6 @@ backend_start_pm2() {
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
   NODE_ENV=production pm2 start dist/server.js --name ${instancia_add}-backend  --update-env --node-args="--max-old-space-size=4096"
-
 EOF
 
   sudo su - root <<EOF

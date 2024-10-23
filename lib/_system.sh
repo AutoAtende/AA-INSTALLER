@@ -35,13 +35,11 @@ system_git_clone() {
   printf "${WHITE} 💻 Fazendo download do código AutoAtende...${GRAY_LIGHT}"
   printf "\n\n"
 
-
   sleep 2
 
 sudo su - deploy <<EOF
   git clone -b main https://lucassaud:${token_code}@github.com/AutoAtende/AA-APP.git /home/deploy/${instancia_add}
 EOF
-
 
   sleep 2
 }
@@ -111,7 +109,6 @@ EOF
   printf "${WHITE} 💻 Remoção da Instancia/Empresa ${empresa_delete} realizado com sucesso ...${GRAY_LIGHT}"
   printf "\n\n"
 
-
   sleep 2
 
 }
@@ -130,6 +127,7 @@ system_node_install() {
 
   sudo su - root <<EOF
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get updated
 sudo apt-get install -y nodejs=20.17.0-1nodesource1
 sleep 2
 
@@ -244,18 +242,37 @@ EOF
 #######################################
 system_pm2_install() {
   print_banner
-  printf "${WHITE} 💻 Instalando pm2...${GRAY_LIGHT}"
-  printf "\n\n"
+  printf "${WHITE} 💻 Verificando se o npm foi devidamente instalado...${GRAY_LIGHT}\n\n"
 
-  sleep 2
+  # Verifica se o npm está instalado
+  if command -v npm &> /dev/null; then
+    printf "${WHITE} ✅ npm encontrado. Instalando pm2...${GRAY_LIGHT}\n\n"
+    sleep 2
 
-  sudo su - root <<EOF
-  npm install -g pm2@latest
-
+    sudo su - root <<EOF
+    npm install -g pm2@latest
 EOF
 
-  sleep 2
+    printf "${WHITE} ✔️ pm2 instalado com sucesso!${GRAY_LIGHT}\n"
+  else
+    printf "${RED} ❌ npm não encontrado. Instalando npm primeiro...${GRAY_LIGHT}\n\n"
+    sleep 2
+
+    # Comando para instalar npm (exemplo para Debian/Ubuntu)
+    sudo apt update
+    sudo apt install -y nodejs npm
+
+    printf "${WHITE} ✅ npm instalado. Agora instalando pm2...${GRAY_LIGHT}\n\n"
+    sleep 2
+
+    sudo su - root <<EOF
+    npm install -g pm2@latest
+EOF
+
+    printf "${WHITE} ✔️ pm2 instalado com sucesso!${GRAY_LIGHT}\n"
+  fi
 }
+
 
 #######################################
 # set timezone
@@ -372,11 +389,9 @@ system_nginx_conf() {
   sleep 2
 
 sudo su - root << EOF
-
 cat > /etc/nginx/conf.d/deploy.conf << 'END'
 client_max_body_size 100M;
 END
-
 EOF
 
   sleep 2
