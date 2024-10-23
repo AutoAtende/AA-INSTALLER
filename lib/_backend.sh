@@ -62,6 +62,7 @@ sudo su - deploy << EOF
   cat <<[-]EOF > /home/deploy/${instancia_add}/backend/.env
 NODE_ENV=production
 BACKEND_URL=${backend_url}
+BACKEND_PUBLIC_PATH=/home/deploy/${instancia_add}/backend/public
 FRONTEND_URL=${frontend_url}
 PROXY_PORT=443
 PORT=${backend_port}
@@ -119,6 +120,10 @@ backend_node_dependencies() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
+
+  printf "${CYAN_LIGHT}Criando diretório public com permissões 777...${NC}\n"
+  mkdir -p public
+  chmod 777 public
   
   printf "${CYAN_LIGHT}Limpando cache do npm...${NC}\n"
   npm cache clean --force
@@ -129,6 +134,7 @@ EOF
 
   sleep 2
 }
+
 
 #######################################
 # compiles backend code
