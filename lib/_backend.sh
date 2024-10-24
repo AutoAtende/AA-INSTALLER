@@ -119,22 +119,14 @@ backend_node_dependencies() {
 
   sleep 2
 
-  sudo su - deploy <<EOF
-  cd /home/deploy/${instancia_add}/backend
-  
-  mkdir -p public
-  chmod 777 public
-  
-  
-  printf "${CYAN_LIGHT}Removendo node_modules (caso exista)...${NC}\n"
-  rm -rf node_modules package-lock.json
-  
-
-  # Instalar com flags adicionais e log detalhado
-  pnpm install
-  
-  printf "${GREEN}Instalação das dependências concluída com sucesso!${NC}\n"
+sudo su - deploy <<EOF
+cd /home/deploy/${instancia_add}/backend
+mkdir -p public
+chmod 777 public
+npm install
 EOF
+
+  printf "${GREEN}Instalação das dependências concluída com sucesso!\n"
 
   sleep 2
 }
@@ -152,10 +144,10 @@ backend_node_build() {
 
   sleep 2
 
-  sudo su - deploy <<EOF
-  cd /home/deploy/${instancia_add}/backend
-  pnpm run build
-  cp .env dist/
+sudo su - deploy <<EOF
+cd /home/deploy/${instancia_add}/backend
+npm run build
+cp .env dist/
 EOF
 
   sleep 2
@@ -173,22 +165,22 @@ backend_update() {
 
   sleep 2
 
-  sudo su - deploy <<EOF
-  cd /home/deploy/${empresa_atualizar}
-  git reset --hard origin/main
-  git pull origin main
-  pm2 stop ${empresa_atualizar}-backend
-  pm2 del ${empresa_atualizar}-backend
-  cd backend
-  rm -rf node_modules
-  pnpm install
-  rm -rf dist 
-  pnpm build
-  cp .env dist/
-  pnpm db:migrate
-  pnpm db:seed:all
-  NODE_ENV=production pm2 start dist/server.js --name ${empresa_atualizar}-backend --update-env --node-args="--max-old-space-size=4096"
-  pm2 save 
+sudo su - deploy <<EOF
+cd /home/deploy/${empresa_atualizar}
+git reset --hard origin/main
+git pull origin main
+pm2 stop ${empresa_atualizar}-backend
+pm2 del ${empresa_atualizar}-backend
+cd backend
+rm -rf node_modules
+npm install
+rm -rf dist 
+npm run build
+cp .env dist/
+npx sequelize db:migrate
+npx sequelize db:seed:all
+NODE_ENV=production pm2 start dist/server.js --name ${empresa_atualizar}-backend --update-env --node-args="--max-old-space-size=4096"
+pm2 save 
 EOF
 
   sleep 2
@@ -206,9 +198,9 @@ backend_db_migrate() {
 
   sleep 2
 
-  sudo su - deploy <<EOF
-  cd /home/deploy/${instancia_add}/backend
-  pnpm db:migrate
+sudo su - deploy <<EOF
+cd /home/deploy/${instancia_add}/backend
+npx sequelize db:migrate
 EOF
 
   sleep 2
@@ -226,9 +218,9 @@ backend_db_seed() {
 
   sleep 2
 
-  sudo su - deploy <<EOF
-  cd /home/deploy/${instancia_add}/backend
-  pnpm db:seed:all
+sudo su - deploy <<EOF
+cd /home/deploy/${instancia_add}/backend
+npx sequelize db:seed:all
 EOF
 
   sleep 2
@@ -247,14 +239,14 @@ backend_start_pm2() {
 
   sleep 2
 
-  sudo su - deploy <<EOF
-  cd /home/deploy/${instancia_add}/backend
-  NODE_ENV=production pm2 start dist/server.js --name ${instancia_add}-backend  --update-env --node-args="--max-old-space-size=4096"
+sudo su - root <<EOF
+pm2 startup
+sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
 EOF
 
-  sudo su - root <<EOF
-   pm2 startup
-  sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
+sudo su - deploy <<EOF
+cd /home/deploy/${instancia_add}/backend
+NODE_ENV=production pm2 start dist/server.js --name ${instancia_add}-backend  --update-env --node-args="--max-old-space-size=4096"
 EOF
 
   sleep 2

@@ -16,7 +16,7 @@ frontend_node_dependencies() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/frontend
-  pnpm install
+  npm install --legacy-peer-deps
 EOF
 
   sleep 2
@@ -36,7 +36,7 @@ frontend_node_build() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/frontend
-  pnpm build
+  npm build
 EOF
 
   sleep 2
@@ -58,9 +58,9 @@ frontend_update() {
   cd /home/deploy/${empresa_atualizar}
   cd /home/deploy/${empresa_atualizar}/frontend
   rm -rf node_modules
-  pnpm install
+  npm install --legacy-peer-deps
   rm -rf build
-  pnpm run build
+  npm run build
 EOF
 
   sleep 2
