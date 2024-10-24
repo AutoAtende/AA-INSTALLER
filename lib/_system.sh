@@ -131,7 +131,7 @@ sudo apt-get updated
 sudo apt-get install -y nodejs=20.17.0-1nodesource1
 sleep 2
 
-sudo npm install -g npm@10.9.0
+sudo npm install -g npm@10.8.0
 sleep 2
 
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
