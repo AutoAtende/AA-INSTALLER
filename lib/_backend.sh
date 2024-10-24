@@ -111,8 +111,6 @@ EOF
 # Arguments:
 #   None
 #######################################
-#!/bin/bash
-
 backend_node_dependencies() {
   print_banner
   printf "${WHITE} 💻 Instalando dependências do backend...${GRAY_LIGHT}"
