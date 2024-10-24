@@ -131,7 +131,7 @@ sudo apt-get updated
 sudo apt-get install -y nodejs=20.17.0-1nodesource1
 sleep 2
 
-sudo npm install -g npm@latest
+sudo curl -fsSL https://get.pnpm.io/install.sh | sh -
 sleep 2
 
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
@@ -250,23 +250,22 @@ system_pm2_install() {
     sleep 2
 
     sudo su - root <<EOF
-    npm install -g pm2@latest
+    pnpm install -g pm2@latest
 EOF
 
     printf "${WHITE} ✔️ pm2 instalado com sucesso!${GRAY_LIGHT}\n"
   else
-    printf "${RED} ❌ npm não encontrado. Instalando npm primeiro...${GRAY_LIGHT}\n\n"
+    printf "${RED} ❌ pnpm não encontrado. Instalando npm primeiro...${GRAY_LIGHT}\n\n"
     sleep 2
 
     # Comando para instalar npm (exemplo para Debian/Ubuntu)
-    sudo apt update
-    sudo apt install -y nodejs npm
+    sudo curl -fsSL https://get.pnpm.io/install.sh | sh -
 
-    printf "${WHITE} ✅ npm instalado. Agora instalando pm2...${GRAY_LIGHT}\n\n"
+    printf "${WHITE} ✅ pnpm instalado. Agora instalando pm2...${GRAY_LIGHT}\n\n"
     sleep 2
 
     sudo su - root <<EOF
-    npm install -g pm2@latest
+    pnpm install -g pm2@latest
 EOF
 
     printf "${WHITE} ✔️ pm2 instalado com sucesso!${GRAY_LIGHT}\n"

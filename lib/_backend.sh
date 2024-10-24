@@ -111,25 +111,31 @@ EOF
 # Arguments:
 #   None
 #######################################
+#!/bin/bash
+
 backend_node_dependencies() {
   print_banner
   printf "${WHITE} 💻 Instalando dependências do backend...${GRAY_LIGHT}"
   printf "\n\n"
 
+
   sleep 2
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-
-  printf "${CYAN_LIGHT}Criando diretório public com permissões 777...${NC}\n"
+  
   mkdir -p public
   chmod 777 public
   
-  printf "${CYAN_LIGHT}Limpando cache do npm...${NC}\n"
-  npm cache clean --force
   
-  printf "${CYAN_LIGHT}Iniciando instalação das dependências...${NC}\n"
-  npm install
+  printf "${CYAN_LIGHT}Removendo node_modules (caso exista)...${NC}\n"
+  rm -rf node_modules package-lock.json
+  
+
+  # Instalar com flags adicionais e log detalhado
+  pnpm install
+  
+  printf "${GREEN}Instalação das dependências concluída com sucesso!${NC}\n"
 EOF
 
   sleep 2
@@ -150,7 +156,7 @@ backend_node_build() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  npm run build
+  pnpm run build
   cp .env dist/
 EOF
 
@@ -177,12 +183,12 @@ backend_update() {
   pm2 del ${empresa_atualizar}-backend
   cd backend
   rm -rf node_modules
-  npm install
+  pnpm install
   rm -rf dist 
-  npm run build
+  pnpm build
   cp .env dist/
-  npx sequelize db:migrate
-  npx sequelize db:seed:all
+  pnpm db:migrate
+  pnpm db:seed:all
   NODE_ENV=production pm2 start dist/server.js --name ${empresa_atualizar}-backend --update-env --node-args="--max-old-space-size=4096"
   pm2 save 
 EOF
@@ -204,7 +210,7 @@ backend_db_migrate() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  npx sequelize db:migrate
+  pnpm db:migrate
 EOF
 
   sleep 2
@@ -224,7 +230,7 @@ backend_db_seed() {
 
   sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/backend
-  npx sequelize db:seed:all
+  pnpm db:seed:all
 EOF
 
   sleep 2
