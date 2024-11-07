@@ -43,31 +43,6 @@ EOF
 }
 
 #######################################
-# updates frontend code
-# Arguments:
-#   None
-#######################################
-frontend_update() {
-  print_banner
-  printf "${WHITE} 💻 Atualizando o frontend...${GRAY_LIGHT}"
-  printf "\n\n"
-
-  sleep 2
-
-  sudo su - deploy <<EOF
-  cd /home/deploy/${empresa_atualizar}
-  cd /home/deploy/${empresa_atualizar}/frontend
-  rm -rf node_modules
-  npm install --legacy-peer-deps
-  rm -rf build
-  npm run build
-EOF
-
-  sleep 2
-}
-
-
-#######################################
 # sets frontend environment variables
 # Arguments:
 #   None
