@@ -154,39 +154,6 @@ EOF
 }
 
 #######################################
-# updates frontend code
-# Arguments:
-#   None
-#######################################
-backend_update() {
-  print_banner
-  printf "${WHITE} 💻 Atualizando o backend...${GRAY_LIGHT}"
-  printf "\n\n"
-
-  sleep 2
-
-sudo su - deploy <<EOF
-cd /home/deploy/${empresa_atualizar}
-git reset --hard origin/main
-git pull origin main
-pm2 stop ${empresa_atualizar}-backend
-pm2 del ${empresa_atualizar}-backend
-cd backend
-rm -rf node_modules
-npm install
-rm -rf dist 
-npm run build
-cp .env dist/
-npx sequelize db:migrate
-npx sequelize db:seed:all
-NODE_ENV=production pm2 start dist/server.js --name ${empresa_atualizar}-backend --update-env --node-args="--max-old-space-size=4096"
-pm2 save 
-EOF
-
-  sleep 2
-}
-
-#######################################
 # runs db migrate
 # Arguments:
 #   None
@@ -236,17 +203,46 @@ backend_start_pm2() {
   print_banner
   printf "${WHITE} 💻 Iniciando pm2 (backend)...${GRAY_LIGHT}"
   printf "\n\n"
-
   sleep 2
 
-sudo su - root <<EOF
+  # Criar o arquivo de configuração do PM2
+  sudo su - deploy << EOF
+  cat > /home/deploy/${instancia_add}/backend/ecosystem.config.js << 'END'
+module.exports = {
+  apps: [{
+    name: "${instancia_add}-backend",
+    script: "./dist/server.js",
+    node_args: "--expose-gc --max-old-space-size=4096",
+    exec_mode: "fork",
+    instances: 1,
+    max_memory_restart: "4G",
+    max_restarts: 5,
+    kill_timeout: 30000,
+    watch: false,
+    error_file: "/home/deploy/${instancia_add}/backend/logs/error.log",
+    out_file: "/home/deploy/${instancia_add}/backend/logs/out.log",
+    time: true,
+    env: {
+      NODE_ENV: "production"
+    }
+  }]
+}
+END
+
+# Criar diretório de logs se não existir
+mkdir -p /home/deploy/${instancia_add}/backend/logs
+EOF
+
+  # Configurar PM2 startup
+  sudo su - root << EOF
 pm2 startup
 sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
 EOF
 
-sudo su - deploy <<EOF
+  # Iniciar a aplicação usando o arquivo de configuração
+  sudo su - deploy << EOF
 cd /home/deploy/${instancia_add}/backend
-NODE_ENV=production pm2 start dist/server.js --name ${instancia_add}-backend  --update-env --node-args="--max-old-space-size=4096"
+NODE_ENV=production pm2 start ecosystem.config.js --update-env
 EOF
 
   sleep 2
