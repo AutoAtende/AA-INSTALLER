@@ -72,14 +72,6 @@ get_empresa_delete() {
   read -p "> " empresa_delete
 }
 
-get_empresa_atualizar() {
-  
-  print_banner
-  printf "${WHITE} 💻 Digite o nome da Instancia/Empresa que deseja Atualizar (Digite o mesmo nome de quando instalou):${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " empresa_atualizar
-}
-
 get_token_code() {
 
   print_banner
@@ -100,12 +92,6 @@ get_urls() {
   get_redis_port
 }
 
-software_update() {
-  get_empresa_atualizar
-  frontend_update
-  backend_update
-}
-
 software_delete() {
   get_empresa_delete
   deletar_tudo
@@ -118,8 +104,7 @@ inquiry_options() {
   printf "${WHITE} 💻 Bem vindo(a) ao AutoAtende selecione abaixo a proxima ação!${GRAY_LIGHT}"
   printf "\n\n"
   printf "   [0] Instalar AutoAtende\n"
-  printf "   [1] Atualizar AutoAtende\n"
-  printf "   [2] Deletar AutoAtende\n"
+  printf "   [1] Deletar AutoAtende\n"
   printf "\n"
   read -p "> " option
 
@@ -127,11 +112,6 @@ inquiry_options() {
     0) get_urls ;;
 
     1) 
-      software_update 
-      exit
-      ;;
-
-    2) 
       software_delete 
       exit
       ;;       
