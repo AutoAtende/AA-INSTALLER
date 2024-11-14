@@ -121,8 +121,12 @@ backend_node_dependencies() {
 
 sudo su - deploy <<EOF
 cd /home/deploy/${instancia_add}/backend
+mkdir -p logs
+chmod 777 logs
 mkdir -p public
 chmod 777 public
+mkdir -p stores
+chmod 777 stores
 npm install
 EOF
 
@@ -212,10 +216,10 @@ module.exports = {
   apps: [{
     name: "${instancia_add}-backend",
     script: "./dist/server.js",
-    node_args: "--expose-gc --max-old-space-size=4096",
+    node_args: "--expose-gc --max-old-space-size=8192",
     exec_mode: "fork",
     instances: 1,
-    max_memory_restart: "4G",
+    max_memory_restart: "8G",
     max_restarts: 5,
     kill_timeout: 180000,
     shutdown_with_message: true,
@@ -232,8 +236,6 @@ module.exports = {
 }
 END
 
-# Criar diretório de logs se não existir
-mkdir -p /home/deploy/${instancia_add}/backend/logs
 EOF
 
   # Configurar PM2 startup
