@@ -63,6 +63,7 @@ sudo su - deploy << EOF
 NODE_ENV=production
 BACKEND_URL=${backend_url}
 BACKEND_PUBLIC_PATH=/home/deploy/${instancia_add}/backend/public
+BACKEND_SESSION_PATH=/home/deploy/${instancia_add}/backend/.sessions
 FRONTEND_URL=${frontend_url}
 PROXY_PORT=443
 PORT=${backend_port}
@@ -221,10 +222,6 @@ module.exports = {
     instances: 1,
     max_memory_restart: "8G",
     max_restarts: 5,
-    kill_timeout: 180000,
-    shutdown_with_message: true,
-    wait_ready: true,
-    listen_timeout: 50000,
     watch: false,
     error_file: "/home/deploy/${instancia_add}/backend/logs/error.log",
     out_file: "/home/deploy/${instancia_add}/backend/logs/out.log",
