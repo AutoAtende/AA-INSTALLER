@@ -151,7 +151,6 @@ backend_node_build() {
 
 sudo su - deploy <<EOF
 cd /home/deploy/${instancia_add}/backend
-npm run build
 cp .env dist/
 EOF
 
