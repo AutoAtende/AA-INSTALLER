@@ -151,6 +151,7 @@ backend_node_build() {
 
 sudo su - deploy <<EOF
 cd /home/deploy/${instancia_add}/backend
+npm run build
 cp .env dist/
 EOF
 
@@ -171,6 +172,8 @@ backend_db_migrate() {
 
 sudo su - deploy <<EOF
 cd /home/deploy/${instancia_add}/backend
+npx sequelize db:migrate
+npx sequelize db:migrate
 npx sequelize db:migrate
 EOF
 
@@ -279,6 +282,20 @@ server {
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     proxy_cache_bypass \$http_upgrade;
   }
+
+  location /public/ {
+      alias /home/deploy/${instancia_add}/backend/public/;  # Caminho local dos arquivos públicos
+      add_header Content-Disposition 'attachment';  # Forçar download para arquivos sensíveis
+      expires 1y;
+      add_header Cache-Control "public";
+      access_log off;
+  }
+
+  # BLoquear solicitacoes de arquivos do GitHub
+  location ~ /\.git {
+    deny all;
+  }
+
 }
 END
 ln -s /etc/nginx/sites-available/${instancia_add}-backend /etc/nginx/sites-enabled
