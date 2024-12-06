@@ -37,6 +37,7 @@ frontend_node_build() {
 sudo su - deploy <<EOF
   cd /home/deploy/${instancia_add}/frontend
   npm run build
+  rm -rf src
 EOF
 
   sleep 2
