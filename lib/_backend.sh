@@ -15,8 +15,7 @@ backend_redis_create() {
 
   sudo su - root <<EOF
   usermod -aG docker deploy
-  docker run --name redis-${instancia_add} -p ${redis_port}:6379 --restart always -v redis-data-${instancia_add}:/data --detach redis:latest redis-server --requirepass ${mysql_root_password} --maxmemory 2gb --maxmemory-policy noeviction --appendonly yes --appendfsync everysec --stop-writes-on-bgsave-error no --save 900 1 --save 300 10 --save 60 10000
-
+  docker run --name redis-${instancia_add} -p ${redis_port}:6379 --restart always -v redis-data-${instancia_add}:/data --detach redis:latest redis-server --requirepass ${mysql_root_password} --maxmemory 2gb --maxmemory-policy noeviction
   sudo su - postgres
   createdb ${instancia_add};
   psql
@@ -99,8 +98,6 @@ FACEBOOK_APP_SECRET=
 JWT_SECRET=${JWT_SECRET}
 JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
 
-TOKEN_GITHUB=
-
 [-]EOF
 EOF
 
@@ -153,6 +150,7 @@ sudo su - deploy <<EOF
 cd /home/deploy/${instancia_add}/backend
 npm run build
 cp .env dist/
+rm -rf src
 EOF
 
   sleep 2
