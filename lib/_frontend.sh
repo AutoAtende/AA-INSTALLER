@@ -96,8 +96,7 @@ frontend_nginx_setup() {
   date_gmt=$(date -u +"%a, %d %b %Y %T GMT")
 
   sudo bash << EOF
-
-cat > /etc/nginx/sites-available/${instancia_add}-frontend << EOF
+cat > /etc/nginx/sites-available/${instancia_add}-frontend << EOF2
 server {
   server_name $frontend_hostname;
   
@@ -105,7 +104,7 @@ server {
   index index.html;
 
   location / {
-      try_files $uri /index.html;
+      try_files \$uri \$uri/ /index.html;
   }
 
   # BLoquear solicitacoes de arquivos do GitHub
@@ -130,10 +129,11 @@ server {
   # Enables response header of "Vary: Accept-Encoding"
   gzip_vary on;
 }
+EOF2
 EOF
 
 sudo ln -s /etc/nginx/sites-available/${instancia_add}-frontend /etc/nginx/sites-enabled
-EOF
+
 
   sleep 2
 }
