@@ -120,33 +120,28 @@ EOF
 #######################################
 system_node_install() {
   print_banner
-  printf "${WHITE} 💻 Instalando nodejs...${GRAY_LIGHT}"
-  printf "\n\n"
+  printf "${WHITE} 💻 Instalando Node.js e PostgreSQL...${GRAY_LIGHT}\n\n"
 
-  sleep 2
+  # Instalação do NVM e Node.js
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # Carregar NVM no ambiente atual
 
-  sudo su - root <<EOF
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get updated
-sudo apt-get install -y nodejs=20.17.0-1nodesource1
-sleep 2
+  nvm install 20.17.0
+  nvm alias default 20.17.0
+  npm install -g npm@10.8.0
 
-sudo npm install -g npm@10.8.0
-sleep 2
+  # Instalação do PostgreSQL
+  echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+  wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /usr/share/keyrings/postgresql.gpg >/dev/null
 
-sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+  sudo apt-get update -y
+  sudo apt-get install -y postgresql-16
 
-sudo apt-get update -y
-
-sudo apt-get -y install postgresql-16
-sleep 2
-
-sudo timedatectl set-timezone America/Sao_Paulo
-EOF
-
-  sleep 2
+  # Configuração do fuso horário
+  sudo timedatectl set-timezone America/Sao_Paulo
 }
+
 #######################################
 # installs fail2ban
 # Arguments:

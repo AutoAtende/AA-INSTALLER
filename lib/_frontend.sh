@@ -92,12 +92,11 @@ frontend_nginx_setup() {
 
   sleep 2
 
-  frontend_hostname=$(echo "${frontend_url/https:\/\/}")
+  frontend_hostname=$(echo "$frontend_url" | sed 's/https:\/\///')
+  date_gmt=$(date -u +"%a, %d %b %Y %T GMT")
 
-sudo su - root << EOF
-
-cat > /etc/nginx/sites-available/${instancia_add}-frontend << 'END'
-
+  sudo bash << EOF
+cat > /etc/nginx/sites-available/${instancia_add}-frontend << EOF2
 server {
   server_name $frontend_hostname;
   
@@ -105,12 +104,7 @@ server {
   index index.html;
 
   location / {
-      try_files \$uri /index.html;
-      add_header Last-Modified $date_gmt;
-      add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
-      if_modified_since off;
-      expires off;
-      etag off;
+      try_files \$uri \$uri/ /index.html;
   }
 
   # BLoquear solicitacoes de arquivos do GitHub
@@ -135,10 +129,11 @@ server {
   # Enables response header of "Vary: Accept-Encoding"
   gzip_vary on;
 }
-END
-
-ln -s /etc/nginx/sites-available/${instancia_add}-frontend /etc/nginx/sites-enabled
+EOF2
 EOF
+
+sudo ln -s /etc/nginx/sites-available/${instancia_add}-frontend /etc/nginx/sites-enabled
+
 
   sleep 2
 }
