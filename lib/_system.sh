@@ -126,9 +126,9 @@ system_node_install() {
   sleep 2
 
   sudo su - root <<EOF
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get updated
-sudo apt-get install -y nodejs=20.17.0-1nodesource1
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+nvm install 20.17
+nvm default alias 20.17
 sleep 2
 
 sudo npm install -g npm@10.8.0
