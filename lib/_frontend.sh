@@ -104,7 +104,7 @@ server {
   index index.html;
 
   location / {
-      try_files $uri /index.html;
+      try_files \$uri /index.html;
       add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
       if_modified_since off;
       expires off;
