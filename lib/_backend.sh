@@ -123,8 +123,8 @@ mkdir -p logs
 chmod 777 logs
 mkdir -p public
 chmod 777 public
-mkdir -p stores
-chmod 777 stores
+mkdir -p public/company1
+chmod 777 public/company1
 npm install
 EOF
 
