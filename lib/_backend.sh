@@ -125,6 +125,20 @@ mkdir -p public
 chmod 777 public
 mkdir -p public/company1
 chmod 777 public/company1
+mkdir -p public/company1/medias
+chmod 777 public/company1/medias
+mkdir -p public/company1/tasks
+chmod 777 public/company1/tasks
+mkdir -p public/company1/announcements
+chmod 777 public/company1/announcements
+mkdir -p public/company1/logos
+chmod 777 public/company1/logos
+mkdir -p public/company1/backgrounds
+chmod 777 public/company1/backgrounds
+mkdir -p public/company1/quickMessages
+chmod 777 public/company1/quickMessages
+mkdir -p public/company1/profile
+chmod 777 public/company1/profile
 npm install
 EOF
 
