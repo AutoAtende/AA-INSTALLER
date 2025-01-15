@@ -62,6 +62,7 @@ sudo su - deploy << EOF
 NODE_ENV=production
 BACKEND_URL=${backend_url}
 BACKEND_PUBLIC_PATH=/home/deploy/${instancia_add}/backend/public
+BACKEND_LOGS_PATH=/home/deploy/${instancia_add}/backend/logs
 BACKEND_SESSION_PATH=/home/deploy/${instancia_add}/backend/.sessions
 FRONTEND_URL=${frontend_url}
 PROXY_PORT=443
@@ -293,14 +294,6 @@ server {
     proxy_set_header X-Forwarded-Proto \$scheme;
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     proxy_cache_bypass \$http_upgrade;
-  }
-
-  location /public/ {
-      alias /home/deploy/${instancia_add}/backend/public/;  # Caminho local dos arquivos públicos
-      add_header Content-Disposition 'attachment';  # Forçar download para arquivos sensíveis
-      expires 1y;
-      add_header Cache-Control "public";
-      access_log off;
   }
 
   # BLoquear solicitacoes de arquivos do GitHub
