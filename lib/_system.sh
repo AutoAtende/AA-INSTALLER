@@ -79,6 +79,10 @@ deletar_tudo() {
 
   sleep 2
 
+  sudo su - deploy <<EOF
+ pm2 stop ${empresa_delete}-backend
+EOF
+
   sudo su - root <<EOF
   docker container stop redis-${empresa_delete}
   docker container rm redis-${empresa_delete} --force
@@ -89,9 +93,21 @@ deletar_tudo() {
   
   sleep 2
 
-  sudo su - postgres
-  dropuser ${empresa_delete}
-  dropdb ${empresa_delete}
+# Encerrar conexões no banco de dados
+sudo -u postgres psql -c "SELECT pg_terminate_backend(pg_stat_activity.pid)
+FROM pg_stat_activity
+WHERE pg_stat_activity.datname = '${empresa_delete}'
+  AND pid <> pg_backend_pid();"
+
+# Excluir o banco de dados
+sudo -u postgres dropdb --force ${empresa_delete}
+
+# Revogar permissões e excluir o usuário
+sudo -u postgres psql -c "REASSIGN OWNED BY ${empresa_delete} TO postgres;"
+sudo -u postgres psql -c "DROP OWNED BY ${empresa_delete};"
+sudo -u postgres dropuser ${empresa_delete}
+
+echo "Banco de dados e usuário ${empresa_delete} excluídos com sucesso!"
   exit
 EOF
 
