@@ -103,35 +103,89 @@ server {
   root /home/deploy/${instancia_add}/frontend/build;
   index index.html;
 
-  location / {
-      try_files \$uri /index.html;
-      add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
-      if_modified_since off;
-      expires off;
-      etag off;
-  }
-
   # Bloquear solicitacoes de arquivos do GitHub
   location ~ /\.git {
     deny all;
   }
 
-  # X-Frame-Options is to prevent from clickJacking attack
-  add_header X-Frame-Options "SAMEORIGIN" always;
+ # Configuração específica para index.html - sempre buscar nova versão
+    location = /index.html {
+        expires -1;
+        add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate" always;
+        add_header Pragma "no-cache" always;
+    }
 
-  # disable content-type sniffing on some browsers.
-  add_header X-Content-Type-Options "nosniff" always;
+    # Configuração para arquivos com hash no nome (gerados pelo Webpack)
+    location /static/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable, max-age=31536000" always;
+        access_log off;
+    }
 
-  # This header enables the Cross-site scripting (XSS) filter
-  add_header X-XSS-Protection "1; mode=block" always;
+    # Configuração para chunks do Webpack
+    location ~* \.([a-f0-9]{8,32})\.(js|css)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable, max-age=31536000" always;
+        access_log off;
+        tcp_nodelay on;
+    }
 
-  # This will enforce HTTP browsing into HTTPS and avoid ssl stripping attack
-  add_header Strict-Transport-Security "max-age=31536000; includeSubdomains" always;
+    # Manifest e outros arquivos de configuração
+    location = /manifest.json {
+        expires -1;
+        add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate" always;
+        add_header Pragma "no-cache" always;
+    }
 
-  add_header Referrer-Policy "no-referrer-when-downgrade" always;
+    # Assets sem hash no nome
+    location ~* \.(ico|pdf|flv|jpg|jpeg|png|gif|svg|js|css|swf)$ {
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000" always;
+        tcp_nodelay on;
+    }
 
-  # Enables response header of "Vary: Accept-Encoding"
-  gzip_vary on;
+    # Regra principal para roteamento do React
+    location / {
+        try_files \$uri /index.html;
+        expires -1;
+        add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate" always;
+        add_header Pragma "no-cache" always;
+    }
+
+    # Configurações de compressão otimizadas
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_min_length 1000;
+    gzip_types
+        application/javascript
+        application/json
+        application/x-javascript
+        application/xml
+        text/css
+        text/javascript
+        text/plain
+        text/xml;
+
+    # Buffer sizes
+    client_body_buffer_size 10K;
+    client_header_buffer_size 1k;
+    client_max_body_size 8m;
+    large_client_header_buffers 2 1k;
+
+    # Timeouts
+    client_body_timeout 12;
+    client_header_timeout 12;
+    keepalive_timeout 15;
+    send_timeout 10;
+
+    # SSL optimization
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:50m;
+    ssl_session_tickets off;
+    ssl_prefer_server_ciphers on;
+
 }
 END
 
