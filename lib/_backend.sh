@@ -120,9 +120,9 @@ backend_node_dependencies() {
 
 sudo su - deploy <<EOF
 cd /home/deploy/${instancia_add}/backend
-mkdir -p logs
+mkdir logs
 chmod 777 logs
-mkdir -p public
+mkdir public
 chmod 777 public
 mkdir -p public/company1
 chmod 777 public/company1
