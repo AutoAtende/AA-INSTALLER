@@ -105,33 +105,7 @@ server {
 
   location / {
       try_files \$uri /index.html;
-      add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
-      if_modified_since off;
-      expires off;
-      etag off;
   }
-
-  # Bloquear solicitacoes de arquivos do GitHub
-  location ~ /\.git {
-    deny all;
-  }
-
-  # X-Frame-Options is to prevent from clickJacking attack
-  add_header X-Frame-Options "SAMEORIGIN" always;
-
-  # disable content-type sniffing on some browsers.
-  add_header X-Content-Type-Options "nosniff" always;
-
-  # This header enables the Cross-site scripting (XSS) filter
-  add_header X-XSS-Protection "1; mode=block" always;
-
-  # This will enforce HTTP browsing into HTTPS and avoid ssl stripping attack
-  add_header Strict-Transport-Security "max-age=31536000; includeSubdomains" always;
-
-  add_header Referrer-Policy "no-referrer-when-downgrade" always;
-
-  # Enables response header of "Vary: Accept-Encoding"
-  gzip_vary on;
 }
 END
 
