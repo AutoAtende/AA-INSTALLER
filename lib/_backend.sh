@@ -79,9 +79,6 @@ TIMEOUT_TO_IMPORT_MESSAGE=999
 FLUSH_REDIS_ON_START=false
 DEBUG_TRACE=false
 CHATBOT_RESTRICT_NUMBER=
-BROWSER_CLIENT=AutoAtende  
-BROWSER_NAME=Chrome  
-BROWSER_VERSION=10.0
 
 REDIS_URI=redis://:${mysql_root_password}@127.0.0.1:${redis_port}
 REDIS_OPT_LIMITER_MAX=1
@@ -234,14 +231,12 @@ module.exports = {
     script: "./dist/server.js",
     node_args: "--expose-gc --max-old-space-size=8192",
     exec_mode: "fork",
-    max_memory_restart: "8G",
+    max_memory_restart: "6G",
     max_restarts: 5,
-    cron_restart: "00 00 * * *",
     instances: 1,
     watch: false,
     error_file: "/home/deploy/${instancia_add}/backend/logs/error.log",
     out_file: "/home/deploy/${instancia_add}/backend/logs/out.log",
-    time: true,
     env: {
       NODE_ENV: "production"
     }
